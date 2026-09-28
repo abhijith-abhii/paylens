@@ -1,0 +1,9 @@
+{
+  "slug": "paylens",
+  "fresh_venv": "work/clean-envs/paylens",
+  "fresh_checkout": "work/clean/paylens",
+  "passed": true,
+  "failure": null,
+  "runtime": "Python 3.12.14",
+  "model_training": null
+}

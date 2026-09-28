@@ -23,11 +23,15 @@ Follow the README installation block, then: Run generate.py then train.py, start
 
 ## Five interview questions
 
-1. **What problem does this project solve, and what is its unit of work?** Explain explore salary estimates and uncertainty, identify career researchers as the audience, and trace one concrete example through the files above. Use the demonstration output rather than hypothetical impact.
-2. **Why did you choose the first design decision?** Separate training, calibration and final test rows before fitting preprocessing. Show the corresponding implementation and a test that would fail if that property were removed.
-3. **How do you protect correctness when inputs or execution change?** Ridge regression uses an explicit median baseline and train-fitted categorical encoding. Explain the relevant invalid-input or edge-case test and distinguish a checked property from an untested assumption.
-4. **How do you make results inspectable and reproducible?** Split conformal residual quantiles create an illustrative prediction interval with finite-sample calibration adjustment. Point to actual outputs and recorded commands. Explain why a successful example is weaker evidence than a tested boundary or independently reconciled total.
-5. **What would you improve before real deployment or real-data use?** Entire dataset is synthetic and generated from a known salary equation. Results have no validated labor-market meaning. Intervals depend on exchangeability and are not guarantees for real applicants. Sensitive attributes are not included; fairness was not established. Choose one limitation, describe the missing evidence, and propose a measurable acceptance check rather than promising production readiness.
+1. **What do the salary numbers mean?** They are outcomes in an authored synthetic dataset, expressed in USD. The model demonstrates a regression workflow; it does not estimate market compensation reliably.
+
+2. **Why compare against a median baseline?** A complex model should improve on a simple prediction. The held-out MAE is compared with predicting the training median for every test record.
+
+3. **How are interval and model fitting separated?** Training fits the preprocessing and regression model. A separate calibration split estimates residual uncertainty. The untouched test split checks point accuracy and interval coverage.
+
+4. **Does 90% coverage guarantee accuracy for each person?** No. Split conformal coverage relies on exchangeability and is marginal across the population. Distribution shift and individual subgroups can behave differently.
+
+5. **How is leakage prevented?** Record IDs are disjoint across training, calibration and test splits, and learned preprocessing is fit only on training data. Tests and saved evaluation artifacts make those boundaries inspectable.
 
 ## Independent exercise
 
@@ -41,6 +45,6 @@ The implementation was developed with substantial AI assistance under Abhijith V
 
 Suggested factual bullet after personally validating the demo:
 
-- Implemented and validated explore salary estimates and uncertainty using scikit-learn · Flask, with validated data and documented correctness checks and limitations.
+- Developed a synthetic salary regression workflow with disjoint training, calibration and test splits; measured $10,142 holdout MAE against a $22,305 median baseline.
 
 Use [VERIFICATION.md](VERIFICATION.md) to add only measured numbers. Do not claim production traffic, users, savings, upstream acceptance or cloud deployment without corresponding evidence.
